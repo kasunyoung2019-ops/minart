@@ -19,4 +19,4 @@ Allow: /
 User-agent: Yeti
 Allow: /
 
-Sitemap: https://kasunyoung.netlify.app/sitemap.xml
+Sitemap: https://www.minarteyelash.com/sitemap.xml
