@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>민아트 홈페이지 고치는 법</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+
+<style>
+:root{
+  --bg:#0B0B0C;
+  --card:#141416;
+  --card2:#1A1A1D;
+  --gold:#C6A15B;
+  --gold-l:#E3C98C;
+  --tx:#F5F3EF;
+  --mut:#9A968E;
+  --line:rgba(198,161,91,.22);
+  --warn:#E0A97A;
+  --warn-bg:rgba(224,169,122,.10);
+
+  --h1:clamp(1.7rem,6.4vw,2.5rem);
+  --h2:clamp(1.18rem,4.5vw,1.5rem);
+  --big:clamp(1.02rem,3.8vw,1.15rem);
+}
+/* 이 안내서는 홈페이지와 같은 검정·골드 한 가지 모습으로 갑니다 */
+
+*,*::before,*::after{ box-sizing:border-box; }
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--tx);
+  font-family:'Noto Sans KR',system-ui,-apple-system,'Malgun Gothic',sans-serif;
+  font-size:17px;
+  line-height:1.9;
+  letter-spacing:-.01em;
+  word-break:keep-all;
+  overflow-wrap:break-word;
+}
+.wrap{ max-width:40rem; margin:0 auto; padding:clamp(2rem,7vw,3.5rem) clamp(1.1rem,5vw,2rem) 4rem; }
+
+h1,h2,h3{ font-family:'Noto Serif KR',serif; color:var(--tx); margin:0; text-wrap:balance; font-weight:600; }
+p{ margin:0; }
+
+.hello{ margin-bottom:2.6rem; }
+.hello .tag{
+  display:inline-block; font-family:'Cormorant Garamond',serif;
+  font-size:1rem; font-weight:500; letter-spacing:.28em; text-transform:uppercase;
+  color:var(--gold-l); border-bottom:1px solid var(--line);
+  padding-bottom:.25rem; margin-bottom:1.2rem;
+}
+h1{ font-size:var(--h1); line-height:1.38; letter-spacing:-.02em; }
+.hello p{ margin-top:1rem; font-size:var(--big); color:var(--mut); }
+
+.three{
+  background:var(--card2); border:1px solid var(--line);
+  border-radius:4px; padding:clamp(1.4rem,5vw,2rem); margin-bottom:2.8rem;
+}
+.three h2{ color:var(--gold-l); font-size:var(--h2); margin-bottom:1.1rem; }
+.three dl{ margin:0; display:flex; flex-direction:column; gap:.9rem; }
+.three dt{ flex:none; width:4.4rem; font-size:.85rem; color:var(--mut); }
+.three dd{ margin:0; font-weight:700; font-size:var(--big); min-width:0; overflow-wrap:anywhere; }
+.three .row{ display:flex; gap:.9rem; align-items:baseline; }
+@media(max-width:26rem){
+  /* 폰에서 주소가 길어 옆으로 밀린다 — 이름과 값을 위아래로 놓는다 */
+  .three .row{ flex-direction:column; gap:.1rem; }
+  .three dt{ width:auto; }
+  .three dd{ font-size:1rem; }
+}
+.three .small{ font-weight:400; font-size:.92rem; color:var(--mut); display:block; margin-top:.15rem; }
+
+.job{
+  background:var(--card); border:1px solid var(--line);
+  border-radius:4px; padding:clamp(1.25rem,4.5vw,1.7rem); margin-bottom:1.1rem;
+}
+.job h2{ font-size:var(--h2); margin-bottom:.55rem; display:flex; gap:.6rem; align-items:baseline; }
+.job h2 .em{ font-size:1.1em; line-height:1; }
+.job > p{ color:var(--mut); font-size:.96rem; margin-bottom:1rem; }
+.job.star{ border-color:var(--gold); background:var(--card2); }
+
+ol.steps{ margin:0; padding:0; list-style:none; counter-reset:s; display:flex; flex-direction:column; gap:.7rem; }
+ol.steps li{ counter-increment:s; padding-left:2.1rem; position:relative; }
+ol.steps li::before{
+  content:counter(s); position:absolute; left:0; top:.3em;
+  width:1.5rem; height:1.5rem; border-radius:50%;
+  border:1px solid var(--line); color:var(--gold-l);
+  font-size:.78rem; font-weight:700; line-height:1.4rem; text-align:center;
+  font-family:'Noto Sans KR',sans-serif;
+}
+ol.steps b{ color:var(--gold-l); font-weight:600; }
+
+ul.plain{ margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:.6rem; }
+ul.plain li{ padding-left:1.25rem; position:relative; }
+ul.plain li::before{
+  content:''; position:absolute; left:.2rem; top:.92em;
+  width:.32rem; height:.32rem; background:var(--gold); transform:rotate(45deg);
+}
+ul.plain b{ color:var(--gold-l); font-weight:600; }
+
+.key{
+  display:inline-block; font-weight:700; color:var(--gold-l);
+  border:1px solid var(--line); padding:.05rem .45rem; border-radius:3px; letter-spacing:.05em;
+}
+
+.tip{
+  margin-top:1.1rem; background:var(--warn-bg); border-left:2px solid var(--warn);
+  padding:.85rem 1rem; font-size:.92rem; color:var(--tx); border-radius:0 3px 3px 0;
+}
+.tip b{ color:var(--warn); }
+
+.last{ margin-top:2.4rem; border-top:1px solid var(--line); padding-top:1.8rem; }
+.last h2{ font-size:var(--h2); margin-bottom:1.1rem; }
+.last .note{ font-size:.95rem; color:var(--mut); margin-top:1.4rem; }
+
+.gohome{ text-align:center; margin-top:2rem; }
+.gohome a{
+  display:inline-block; padding:.9rem 1.9rem; border-radius:3px;
+  background:var(--gold); color:#12100B; text-decoration:none; font-weight:700; font-size:1rem;
+}
+
+footer{ margin-top:2.6rem; padding-top:1.2rem; border-top:1px solid var(--line);
+        font-size:.85rem; color:var(--mut); text-align:center;
+        font-family:'Cormorant Garamond',serif; letter-spacing:.12em; }
+
+@media (prefers-reduced-motion:reduce){ *{ transition:none!important; animation:none!important; } }
+</style>
+
+<div class="wrap">
+
+  <header class="hello">
+    <span class="tag">Min Art</span>
+    <h1>이제 홈페이지 글을<br>직접 고치실 수 있습니다.</h1>
+    <p>컴퓨터를 잘 몰라도 괜찮습니다. 고치고, 단추 하나 누르면 끝입니다.</p>
+  </header>
+
+  <section class="three">
+    <h2>딱 세 가지만 기억하세요</h2>
+    <dl>
+      <div class="row">
+        <dt>들어가는 곳</dt>
+        <dd>www.minarteyelash.com/admin.html
+          <span class="small">홈페이지 주소 뒤에 <b>/admin.html</b> 을 붙이면 됩니다</span></dd>
+      </div>
+      <div class="row">
+        <dt>비밀번호</dt>
+        <dd>0550</dd>
+      </div>
+      <div class="row">
+        <dt>마지막에</dt>
+        <dd>「웹에 반영하기」
+          <span class="small">이걸 눌러야 손님 화면에도 보입니다</span></dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="job">
+    <h2><span class="em">📱</span>들어가기</h2>
+    <p>휴대폰으로도 되고 컴퓨터로도 됩니다.</p>
+    <ol class="steps">
+      <li>인터넷 주소창에 <b>www.minarteyelash.com/admin.html</b> 을 칩니다.</li>
+      <li>비밀번호 <span class="key">0550</span> 을 넣고 <b>들어가기</b>.</li>
+    </ol>
+    <div class="tip"><b>편하게 쓰시려면</b> — 휴대폰에서 이 화면을 열고 「홈 화면에 추가」를 해두시면,
+      다음부터는 앱처럼 눌러서 바로 들어가실 수 있습니다.</div>
+  </section>
+
+  <section class="job">
+    <h2><span class="em">✏️</span>무엇을 고칠 수 있나</h2>
+    <p>왼쪽 메뉴에서 골라 고치시면 됩니다.</p>
+    <ul class="plain">
+      <li><b>이벤트 팝업</b> — 홈페이지에 들어오면 뜨는 안내창. 모집이 끝나면 <b>꼭 꺼 주세요.</b></li>
+      <li><b>후기 관리</b> — 손님 후기를 넣고 지웁니다.</li>
+      <li><b>사진 관리</b> — 주요 사진과 활동 갤러리 사진을 바꿉니다.</li>
+      <li><b>시술 메뉴 · 가격</b> — 메뉴 이름과 금액.</li>
+      <li><b>연락처 · 기본정보</b> — 전화·카카오·인스타·주소·영업시간.</li>
+      <li><b>문의 알림 설정</b> — 문의가 들어올 이메일 주소.</li>
+    </ul>
+    <div class="tip"><b>사진은 모양을 맞춰 주세요.</b> 가로로 넓은 자리엔 가로 사진을,
+      세로로 긴 자리엔 세로 사진을 넣으셔야 잘리지 않습니다.
+      넣으시면 홈페이지 크기에 맞게 자동으로 줄어듭니다.</div>
+  </section>
+
+  <section class="job star">
+    <h2><span class="em">🌐</span>웹에 반영하기 — 가장 중요합니다</h2>
+    <p>고치신 것은 <b>대표님 화면에만</b> 있습니다. 이 단추를 눌러야 손님에게도 보입니다.</p>
+    <ol class="steps">
+      <li>다 고치셨으면 <b>「웹에 반영하기」</b>를 누릅니다.</li>
+      <li>비밀번호 <span class="key">0550</span> 을 한 번 더 넣습니다.</li>
+      <li><b>「반영했습니다」</b>가 뜨면 끝입니다.</li>
+      <li><b>1~2분</b> 뒤 홈페이지를 새로고침하면 바뀐 내용이 보입니다.</li>
+    </ol>
+    <div class="tip"><b>마음껏 고쳐 보셔도 됩니다.</b> 반영을 누르기 전까지는
+      아무에게도 보이지 않습니다. 마음에 드실 때 누르시면 됩니다.</div>
+  </section>
+
+  <section class="job">
+    <h2><span class="em">💾</span>「저장하기」는 무엇인가요</h2>
+    <p>옆에 있는 <b>「저장하기 (파일 내려받기)」</b>는 홈페이지 파일을 통째로 내려받는 단추입니다.</p>
+    <ul class="plain">
+      <li>평소에는 <b>「웹에 반영하기」만</b> 쓰시면 됩니다.</li>
+      <li>큰 수정을 하시기 전에 한 번 눌러 <b>파일을 받아 두시면</b> 되돌릴 때 쓸 수 있습니다.</li>
+    </ul>
+  </section>
+
+  <section class="job">
+    <h2><span class="em">📩</span>문의는 어떻게 오나요</h2>
+    <ul class="plain">
+      <li>손님이 문의를 넣으면 <b>이메일</b>로 도착합니다.</li>
+      <li>이메일이 안 되면 손님 화면에서 <b>카카오톡 상담창</b>이 열립니다.</li>
+      <li>첫 문의 때 그 메일 주소로 <b>인증 메일</b>이 한 번 옵니다.
+        <b>그 메일의 버튼을 눌러야</b> 이후 문의가 계속 도착합니다.</li>
+    </ul>
+    <div class="tip"><b>텔레그램 알림은 뺐습니다.</b> 봇 열쇠를 홈페이지 파일에 적어야 하는 방식이라,
+      누구나 소스보기로 볼 수 있게 되기 때문입니다. 필요하시면 안전한 방식으로 다시 붙일 수 있습니다.</div>
+  </section>
+
+  <section class="last">
+    <h2>이것만은 기억해 주세요</h2>
+    <ul class="plain">
+      <li><b>고친 뒤에는 꼭 「웹에 반영하기」.</b> 이걸 안 누르면 손님 화면은 그대로입니다.</li>
+      <li><b>비밀번호는 알려주지 마세요.</b> 주소만 알면 누구나 로그인 화면까지는 들어옵니다.</li>
+      <li><b>대표 소개·이력·아카데미 교육·자주 묻는 질문</b>은 여기서 못 고칩니다.
+        자주 바뀌지 않아 빼두었습니다. 필요하시면 말씀해 주세요.</li>
+    </ul>
+    <p class="note">해보시다가 막히시거나 이상하면 <b>그 화면을 그대로 캡처해서</b> 보내 주세요.
+      뭘 잘못 누르셔도 홈페이지는 망가지지 않습니다. 편하게 만져 보셔도 됩니다.</p>
+  </section>
+
+  <div class="gohome"><a href="admin.html">관리자 화면으로 가기 &rarr;</a></div>
+
+  <footer>Min Art Eyelash · www.minarteyelash.com</footer>
+</div>
+
+</body>
+</html>
