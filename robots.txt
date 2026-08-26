@@ -19,4 +19,4 @@ Allow: /
 User-agent: Yeti
 Allow: /
 
-Sitemap: https://minarteyelash.com/sitemap.xml
+Sitemap: https://www.minarteyelash.com/sitemap.xml
