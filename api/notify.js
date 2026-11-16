@@ -1,8 +1,13 @@
-/* 문의 알림 — 홈페이지 문의 폼이 보낸 내용을 텔레그램으로 전달한다.
+/* 알림 — 홈페이지에서 들어온 문의·교육 신청·행사 신청을 텔레그램으로 전달한다.
  *
  * 예전에는 텔레그램 봇 토큰이 홈페이지 파일(index.html)에 들어 있어서
  * 누구나 소스 보기로 볼 수 있었다. 이제 토큰은 버셀 서버 안에만 있고
- * 브라우저로 내려가지 않는다. 홈페이지는 이 주소(/api/notify)로 문의 내용만 보낸다.
+ * 브라우저로 내려가지 않는다. 홈페이지는 이 주소(/api/notify)로 내용만 보낸다.
+ *
+ * 받는 종류 (body.kind)
+ *   (없음)   일반 문의        { name, tel, type, msg }
+ *   academy  교육 신청서      { course, option, price, name, tel, birth, area, career, want }
+ *   event    행사 신청(팝업)  { event, options[], name, tel, msg }
  *
  * 버셀에 넣어 둘 값 (Settings → Environment Variables)
  *   TELEGRAM_BOT_TOKEN  @BotFather 에서 받은 봇 토큰
@@ -12,6 +17,40 @@
 
 function clean(v, max) {
   return String(v == null ? '' : v).trim().slice(0, max);
+}
+
+function buildText(b, when) {
+  const name = clean(b.name, 40);
+  const tel = clean(b.tel, 30);
+  const foot = `\n\n${when}\n민아트속눈썹연구소 홈페이지`;
+
+  if (b.kind === 'academy') {
+    const course = clean(b.course, 80);
+    const option = clean(b.option, 60);
+    return (
+      '🎓 교육 신청이 들어왔습니다\n\n' +
+      `과정 : ${course}${option ? ' (' + option + ')' : ''}\n교육비 : ${clean(b.price, 40) || '-'}\n\n` +
+      `이름 : ${name}\n연락처 : ${tel}\n생년월일 : ${clean(b.birth, 30) || '-'}\n지역 : ${clean(b.area, 60) || '-'}\n\n` +
+      `[경력]\n${clean(b.career, 800) || '-'}\n\n[배우고 싶은 부분 · 하고 싶은 말]\n${clean(b.want, 1000) || '-'}` +
+      foot
+    );
+  }
+
+  if (b.kind === 'event') {
+    const opts = (Array.isArray(b.options) ? b.options : []).slice(0, 5).map(o => clean(o, 60)).filter(Boolean);
+    return (
+      '🎟 행사 신청이 들어왔습니다\n\n' +
+      `행사 : ${clean(b.event, 80)}\n신청 : ${opts.join(' / ') || '-'}\n\n` +
+      `이름 : ${name}\n연락처 : ${tel}\n\n[남기신 말씀]\n${clean(b.msg, 800) || '(없음)'}` +
+      foot
+    );
+  }
+
+  return (
+    '🔔 새 문의가 들어왔습니다\n\n' +
+    `문의 유형 : ${clean(b.type, 40)}\n이름 : ${name}\n연락처 : ${tel}\n내용 : ${clean(b.msg, 1000) || '(없음)'}` +
+    foot
+  );
 }
 
 module.exports = async function handler(req, res) {
@@ -29,20 +68,13 @@ module.exports = async function handler(req, res) {
     }
 
     const b = req.body || {};
-    const name = clean(b.name, 40);
-    const tel = clean(b.tel, 30);
-    const type = clean(b.type, 40);
-    const msg = clean(b.msg, 1000);
-    if (!name || tel.replace(/\D/g, '').length < 8) {
+    if (!clean(b.name, 40) || clean(b.tel, 30).replace(/\D/g, '').length < 8) {
       res.status(400).json({ ok: false, error: '이름과 연락처를 확인해 주세요.' });
       return;
     }
 
     const when = new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul', hour12: false });
-    const text =
-      '🔔 새 문의가 들어왔습니다\n\n' +
-      `문의 유형 : ${type}\n이름 : ${name}\n연락처 : ${tel}\n내용 : ${msg || '(없음)'}\n\n` +
-      `${when}\n민아트속눈썹연구소 홈페이지`;
+    const text = buildText(b, when).slice(0, 3900);
 
     const r = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: 'POST',
